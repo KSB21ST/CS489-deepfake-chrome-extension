@@ -12,6 +12,13 @@
     "action": {
         "default_popup":"popup.html"
     },
-    "permissions": ["scripting", "activeTab"],
+    "permissions": ["scripting", "activeTab", "downloads", "storage"],
+    "host_permissions": ["<all_urls>"],
+    "web_accessible_resources": [
+        {
+        "resources": ["lib/jszip.min.js", "jspdf.es.js"],
+        "matches": ["<all_urls>"]
+        }
+    ],
     "background":{}
 }

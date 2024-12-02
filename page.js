@@ -2,9 +2,10 @@
  * Listener that receives a message with a list of image
  * URL's to display from popup.
  */
+
 chrome.runtime.onMessage
     .addListener((message,sender,sendResponse) => {
-        addImagesToContainer(message)
+        addImagesToContainer(message);
         sendResponse("OK");
     });
 

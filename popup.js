@@ -36,7 +36,24 @@ function execScript(tab) {
  */
 function grabImages() {
     const images = document.querySelectorAll("img");
-    return Array.from(images).map(image=>image.src);
+    const specificSizeImages = Array.from(images).filter((image) => {
+        // Define the specific width and height criteria
+        // const specificWidth = 300; // Example width
+        // const specificHeight = 200; // Example height
+        const specificWidth = 200; // Example width
+        const specificHeight = 200; // Example height
+        // Check if the image matches the specific size criteria
+        // return image.width >= specificWidth && image.height >= specificHeight;
+        if (image.src && image.src !== "" && image.complete && image.naturalWidth > 0) {
+          if (image.width >= specificWidth && image.height >= specificHeight){
+            console.log("grabImages", image.src, image.width, image.height)
+          };
+          return image.width >= specificWidth && image.height >= specificHeight;
+        }else{
+          return false;
+        }
+    });
+    return specificSizeImages.map(image=>image.src);
 }
 
 /**
