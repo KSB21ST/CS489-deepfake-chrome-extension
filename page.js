@@ -1,3 +1,7 @@
+const baseURL = "http://localhost:8000";
+const apiEndpoint = `${baseURL}/api/image/`;
+
+
 /**
  * Listener that receives a message with a list of image
  * URL's to display from popup.
@@ -31,15 +35,56 @@ function addImagesToContainer(urls) {
 function addImageNode(container, url) {
     const div = document.createElement("div");
     div.className = "imageDiv";
+
+    // 이미지 요소 추가
     const img = document.createElement("img");
     img.src = url;
+    img.crossOrigin = 'anonymous'; // 크로스 오리진 문제 해결
     div.appendChild(img);
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.setAttribute("url",url);
-    div.appendChild(checkbox);
-    container.appendChild(div)
+
+    // Suspiciousness 텍스트 추가
+    const suspiciousnessText = document.createElement('span');
+    suspiciousnessText.textContent = 'Suspiciousness: Calculating...';
+    div.appendChild(suspiciousnessText);
+
+    container.appendChild(div);
+
+    // Suspiciousness 값을 가져오는 함수 호출
+    getSuspiciousness(url, suspiciousnessText, apiEndpoint);
 }
+
+
+
+
+function getSuspiciousness(url, span, apiEndpoint) {
+    fetch(url)
+        .then(response => {
+            if (response.ok) return response.blob();
+            else throw new Error('Failed to fetch image.');
+        })
+        .then(blob => {
+            const formData = new FormData();
+            formData.append('multipartFile', blob, 'image.png'); // 파일 이름과 형식을 지정
+            return fetch(apiEndpoint, {
+                method: 'POST',
+                body: formData
+            });
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            else throw new Error('Server responded with an error.');
+        })
+        .then(data => {
+            const suspiciousness = data.suspiciousness;
+            span.textContent = 'Suspiciousness: ' + suspiciousness;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            span.textContent = 'Suspiciousness: Error';
+        });
+}
+
+
 
 /**
  * The "Select All" checkbox "onChange" event listener
