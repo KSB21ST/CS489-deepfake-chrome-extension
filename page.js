@@ -1,5 +1,5 @@
-const baseURL = "http://localhost:8000";
-const apiEndpoint = `${baseURL}/api/image/`;
+const baseURL = "http://143.248.136.29:5000";
+const apiEndpoint = `${baseURL}/predict`;
 
 
 /**
@@ -51,36 +51,45 @@ function addImageNode(container, url) {
 
     // Suspiciousness 값을 가져오는 함수 호출
     getSuspiciousness(url, suspiciousnessText, apiEndpoint);
+    console.log(url);
 }
 
 
 
 
-function getSuspiciousness(url, span, apiEndpoint) {
-    fetch(url)
-        .then(response => {
-            if (response.ok) return response.blob();
-            else throw new Error('Failed to fetch image.');
-        })
-        .then(blob => {
-            const formData = new FormData();
-            formData.append('multipartFile', blob, 'image.png'); // 파일 이름과 형식을 지정
-            return fetch(apiEndpoint, {
-                method: 'POST',
-                body: formData
-            });
-        })
+function getSuspiciousness(base64ImageSrc, span, apiEndpoint) {
+    // Base64 데이터를 디코드하여 Blob으로 변환
+    const base64Data = base64ImageSrc.split(',')[1]; // Base64 데이터 부분만 추출
+    const binaryData = atob(base64Data); // Base64 디코딩
+    const arrayBuffer = new Uint8Array(binaryData.length);
+
+    for (let i = 0; i < binaryData.length; i++) {
+        arrayBuffer[i] = binaryData.charCodeAt(i); // Binary 데이터로 변환
+    }
+
+    const blob = new Blob([arrayBuffer], { type: 'image/png' }); // Blob 생성
+
+    // FormData에 Blob 추가
+    const formData = new FormData();
+    formData.append('image', blob, 'image.png'); // Blob을 FormData에 추가
+
+    // API로 요청 전송
+    fetch(apiEndpoint, {
+        method: 'POST',
+        body: formData,
+    })
         .then(response => {
             if (response.ok) return response.json();
             else throw new Error('Server responded with an error.');
         })
         .then(data => {
-            const suspiciousness = data.suspiciousness;
-            span.textContent = 'Suspiciousness: ' + suspiciousness;
+            const suspiciousness = data.probability; // API 응답에서 Suspiciousness 가져오기
+            console.log(suspiciousness);
+            span.textContent = 'Suspiciousness: ' + suspiciousness; // 결과를 UI에 업데이트
         })
         .catch(error => {
-            console.error('Error:', error);
-            span.textContent = 'Suspiciousness: Error';
+            console.error('Error:', error); // 에러 처리
+            span.textContent = 'Suspiciousness: Error'; // UI에 에러 표시
         });
 }
 
