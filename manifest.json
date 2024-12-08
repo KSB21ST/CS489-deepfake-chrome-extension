@@ -22,7 +22,7 @@
     ],
     "web_accessible_resources": [
         {
-        "resources": ["lib/jszip.min.js", "jspdf.es.js"],
+        "resources": ["lib/jszip.min.js", "jspdf.es.js", "inject.js"],
         "matches": ["<all_urls>"]
         }
     ],
