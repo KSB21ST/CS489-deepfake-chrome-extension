@@ -1,96 +1,44 @@
-const grabBtn = document.getElementById("grabBtn");
-grabBtn.addEventListener("click",() => {
-    // Get active browser tab
-    chrome.tabs.query({active: true}, function(tabs) {
-        var tab = tabs[0];
-        if (tab) {
-            execScript(tab);
-        } else {
-            alert("There are no active tabs")
-        }
-    })
-})
+const onBtn = document.getElementById("onBtn");
+const offBtn = document.getElementById("offBtn");
 
-/**
- * Execute a grabImages() function on a web page,
- * opened on specified tab and on all frames of this page
- * @param tab - A tab to execute script on
- */
-function execScript(tab) {
-    // Execute a function on a page of the current browser tab
-    // and process the result of execution
-    chrome.scripting.executeScript(
-        {
-            target:{tabId: tab.id, allFrames: true},
-            func:grabImages
-        },
-        onResult
-    )
-}
+// 초기 상태를 Off로 가정
+let detectingState = false;
 
-/**
- * Executed on a remote browser page to grab all images
- * and return their URLs
- *
- *  @return Array of image URLs
- */
-function grabImages() {
-    const images = document.querySelectorAll("img");
-    const specificSizeImages = Array.from(images).filter((image) => {
-        const specificWidth = 200; // Example width
-        const specificHeight = 200; // Example height
-        if (image.src && image.src !== "" && image.complete && image.naturalWidth > 0) {
-          if (image.width >= specificWidth && image.height >= specificHeight){
-            console.log("grabImages", image.src, image.width, image.height)
-          };
-          return image.width >= specificWidth && image.height >= specificHeight;
-        }else{
-          return false;
-        }
-    });
-    return specificSizeImages.map(image=>image.src);
-}
+// 상태 변경 함수
+function updateDetectingState(state) {
+    detectingState = state;
 
-/**
- * Executed after all grabImages() calls finished on
- * remote page
- * Combines results and copy a list of image URLs
- * to clipboard
- *
- * @param {[]InjectionResult} frames Array
- * of grabImage() function execution results
- */
-function onResult(frames) {
-    // If script execution failed on remote end
-    // and could not return results
-    if (!frames || !frames.length) {
-        alert("Could not retrieve images from specified page");
-        return;
+    // UI 업데이트
+    if (detectingState) {
+        onBtn.classList.add("on");
+        offBtn.classList.remove("on");
+    } else {
+        offBtn.classList.add("on");
+        onBtn.classList.remove("on");
     }
-    // Combine arrays of image URLs from
-    // each frame to a single array
-    const imageUrls = frames.map(frame=>frame.result)
-                            .reduce((r1,r2)=>r1.concat(r2));
-    // Open a page with a list of images and send urls to it
-    openImagesPage(imageUrls)
+
+    // 상태를 저장
+    chrome.storage.local.set({detecting: detectingState});
+
+    // content.js에 상태 전달
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: "updateState", detecting: detectingState});
+    });
 }
 
-/**
- * Opens a page with list of URLs and UI to select and
- * download them on a new browser tab and send an
- * array of image URLs to this page
- *
- * @param {*} urls - Array of Image URLs to send
- */
-function openImagesPage(urls) {
-    chrome.tabs.create(
-        {"url": "page.html",active:false},(tab) => {
-            // * Send `urls` array to this page
-            setTimeout(()=>{
-                chrome.tabs.sendMessage(tab.id,urls,(response) => {
-                    chrome.tabs.update(tab.id,{active: true});
-                });
-            },500);
-        }
-    );
-}
+// 이벤트 리스너 등록
+onBtn.addEventListener("click", () => {
+    updateDetectingState(true);
+});
+
+offBtn.addEventListener("click", () => {
+    updateDetectingState(false);
+});
+
+// 팝업이 열릴 때 상태 복원
+document.addEventListener("DOMContentLoaded", () => {
+    chrome.storage.local.get(["detecting"], (result) => {
+        const savedState = result.detecting !== undefined ? result.detecting : false;
+        updateDetectingState(savedState);
+    });
+});

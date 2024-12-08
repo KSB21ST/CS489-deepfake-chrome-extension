@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>RealEye</title>
-        <link rel="stylesheet" type="text/css" href="popup.css"/>
-    </head>
-    <body>
-        <h1>RealEye</h1>
-        <button id="grabBtn">Detecting On</button>
-        <script src="popup.js"></script>
-    </body>
+<head>
+    <title>RealEye</title>
+    <link rel="stylesheet" type="text/css" href="popup.css"/>
+</head>
+<body>
+    <h1>RealEye</h1>
+    <div class="detecting-control">
+        <span>Detecting:</span>
+        <button id="onBtn" class="toggle-btn off">On</button>
+        <button id="offBtn" class="toggle-btn on">Off</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
 </html>

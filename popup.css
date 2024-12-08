@@ -1,15 +1,32 @@
 body {
     text-align:center;
     width:200px;
+    background-color: white;
+    color: black;
+    font-family: sans-serif;
 }
 
-button {
-    width:100%;
-    color:white;
-    background:linear-gradient(#01a9e1, #5bc4bc);
-    border-width:0px;
-    border-radius:20px;
+.detecting-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.toggle-btn {
+    width:50px;
+    background: white;
+    border: 2px solid black;
+    border-radius:5px;
     padding:5px;
     font-weight: bold;
     cursor:pointer;
+    color: black;
+}
+
+/* 선택된 상태(on 클래스)가 붙은 버튼 스타일 */
+.toggle-btn.on {
+    background: black;
+    color: white;
 }

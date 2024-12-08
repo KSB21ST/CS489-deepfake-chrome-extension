@@ -46,25 +46,6 @@ body {
     height:20px;
 }
 
-.header > button {
-    color:white;
-    background:linear-gradient(#01a9e1, #5bc4bc);
-    border-width:0px;
-    border-radius:5px;
-    padding:10px;
-    font-weight: bold;
-    cursor:pointer;
-    box-shadow: 2px 2px #00000066;
-    margin-right: 20px;
-    font-size:16px;
-    text-shadow: 2px 2px 2px #00000088;
-}
-
-.header > button:hover {
-    background:linear-gradient( #5bc4bc,#01a9e1);
-    box-shadow: 2px 2px #00000066;
-}
-
 .container {
     display: flex;
     flex-wrap: wrap;

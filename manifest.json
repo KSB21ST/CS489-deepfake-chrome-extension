@@ -21,8 +21,12 @@
     ],
     "web_accessible_resources": [
         {
-        "resources": ["lib/jszip.min.js", "jspdf.es.js"],
-        "matches": ["<all_urls>"]
+            "resources": [
+                "lib/jszip.min.js",
+                "jspdf.es.js",
+                "icons/icon_32.png" 
+            ],
+            "matches": ["<all_urls>"]
         }
     ],
     "background":{}
