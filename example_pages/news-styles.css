@@ -1,0 +1,93 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header Styling */
+header {
+    background-color: #cc0000;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Main Article Styling */
+.news-article {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+/* Headline and Subheadline */
+.headline {
+    font-size: 2em;
+    margin: 10px 0;
+    color: #222;
+}
+
+.subheadline {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Author Info */
+.author-info {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* Main Image */
+.main-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Article Body */
+.article-body {
+    font-size: 1em;
+    line-height: 1.6em;
+    margin-bottom: 15px;
+}
+
+/* Related Articles Section */
+.related-articles {
+    margin-top: 30px;
+}
+
+.related-articles h2 {
+    font-size: 1.3em;
+    color: #cc0000;
+    margin-bottom: 10px;
+}
+
+.related-articles ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.related-articles ul li {
+    margin: 5px 0;
+}
+
+.related-articles ul li a {
+    text-decoration: none;
+    color: #cc0000;
+}
+
+.related-articles ul li a:hover {
+    text-decoration: underline;
+}
