@@ -64,8 +64,8 @@ function handleImageHover(element, imageUrl) {
   element.style.cursor = `url(${chrome.runtime.getURL("icons/icon_32.png")}), auto`;
   // outline 제거 및 추가 스타일 처리 (필요 시)
   element.style.outline = "none";
-  console.log("Hovered element:", element);
-  console.log("Image URL:", imageUrl);
+  // console.log("Hovered element:", element);
+  // console.log("Image URL:", imageUrl);
 }
 
 // 이미지 정보 요청 함수
@@ -107,7 +107,7 @@ function sendImageToServer(element) {
       return response.json();
     })
     .then(data => {
-      console.log("Server response:", data);
+      // console.log("Server response:", data);
 
       // Probability formatting
       let prob = data.probability;
