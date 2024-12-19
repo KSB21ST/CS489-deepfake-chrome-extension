@@ -1,5 +1,5 @@
 {
-    "name": "Image Grabber",
+    "name": "RealEye",
     "description": "Extract all images from current web page",
     "version": "1.0",
     "manifest_version": 3,
